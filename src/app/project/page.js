@@ -1,5 +1,4 @@
 import Course_sideBar from '@/components/UI/(Course)/Course_sideBar';
-import { GetAllBook } from '@/app/api/getBooks';
 import fetchApi from '@/utils/API_suport/fetchData';
 import GetPerSever from '@/utils/GetPerSever'
 
@@ -18,16 +17,7 @@ export default async function CoursePage() {
 
   const isManagerRole = per.role?.Permission?.Course?.create.level == 'All'
 
-  let data_book = null;
-  if (isManagerRole) {
-    try {
-      data_book = await GetAllBook().catch((error) => { return null })
-    } catch (error) {
-      data_book = null;
-    }
-  }
-
   return (
-    <Course_sideBar data={data} data_book={data_book || []} />
+    <Course_sideBar data={data} />
   );
 }

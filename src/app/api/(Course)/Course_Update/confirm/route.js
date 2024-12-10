@@ -1,4 +1,4 @@
-import PostCourse from "@/models/postCourse";
+import PostCourse from "@/models/postProject";
 import PostModel from "@/models/postTask";
 import connectDB from "@/config/database";
 import { authenticate } from '@/utils/authenticate';

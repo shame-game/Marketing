@@ -1,4 +1,4 @@
-import PostCourse from "@/models/postCourse";
+import PostCourse from "@/models/postProject";
 import PostUser from "@/models/postUser";
 import connectDB from "@/config/database";
 import jwt from 'jsonwebtoken';

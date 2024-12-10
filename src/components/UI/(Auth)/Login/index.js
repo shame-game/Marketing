@@ -21,7 +21,7 @@ export default function Login() {
     setErrorMessage(null);
     setIsLoading(true);
     try {
-      const res = await fetch('/api/Login', {
+      const res = await fetch('http://localhost:3000/api/Login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, password: password, }),
@@ -58,7 +58,7 @@ export default function Login() {
           background: 'white'
         }}
       >
-        <h1 className='Login_T'> AI Robotic </h1>
+        <h1 className='Login_T'> Marketing </h1>
         {errorMessage && (
           <Typography color="error" sx={{ mt: 2 }}>
             {errorMessage}

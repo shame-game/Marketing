@@ -7,26 +7,26 @@ import Box from '@mui/material/Box';
 import { cookies } from 'next/headers';
 
 export default async function RootLayout({ children }) {
-  const token = cookies().get('u')?.value;
+  // const token = cookies().get('u')?.value;
 
-  const response = await fetch(`${process.env.URL}/api/CheckUser`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({ source: 1 }),
-    cache: 'no-store'
-  });
+  // const response = await fetch(`http://localhost:3000/api/CheckUser`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${token}`,
+  //   },
+  //   body: JSON.stringify({ source: 1 }),
+  //   cache: 'no-store'
+  // });
 
-  let data = null;
+  // let data = null;
 
-  if (response.ok) {
-    const result = await response.json();
-    if (result.air === 2) {
-      data = result.data;
-    }
-  }
+  // if (response.ok) {
+  //   const result = await response.json();
+  //   if (result.air === 2) {
+  //     data = result.data;
+  //   }
+  // }
 
   return (
     <html lang="en">

@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import { NextResponse } from "next/server";
 import { Readable } from "stream";
 import sharp from "sharp";
-import PostCourse from "@/models/postCourse";
+import PostCourse from "@/models/postProject";
 import connectDB from "@/config/database";
 const auth = new google.auth.GoogleAuth({
   credentials: {

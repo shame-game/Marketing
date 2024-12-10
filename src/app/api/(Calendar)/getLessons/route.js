@@ -1,4 +1,4 @@
-import PostCourse from "@/models/postCourse";
+import PostCourse from "@/models/postProject";
 import connectDB from "@/config/database";
 import PostBook from "@/models/postBook";
 import { NextResponse } from 'next/server';
@@ -42,10 +42,10 @@ export async function GET(request) {
     // Nếu không tìm thấy slide
     if (slide?.Topic?.[lessonsName]?.Slide) {
       sl = slide.Topic[lessonsName].Slide
-    } 
+    }
     course.Detail = course.Detail[0]
     // Trả về dữ liệu course và slide
-    return NextResponse.json({ course, slide: sl}, { status: 200 });
+    return NextResponse.json({ course, slide: sl }, { status: 200 });
 
   } catch (error) {
     // Xử lý lỗi

@@ -1,29 +1,24 @@
 import { Schema, model, models } from 'mongoose'
 
-const postBook = new Schema({
+const postProject = new Schema({
   ID: {
     type: String,
     required: true,
   },
   Name: {
-    type: String,
-    required: true,
+    type: String
+  },
+  Room: {
+    type: String
   },
   Address: {
-    type: String,
-    required: true,
+    type: String
   },
   Price: {
     type: Number
   },
   Progress: {
     type: String
-  },
-  Quantity: {
-    type: Number
-  },
-  Status: {
-    type: Boolean
   },
   Status: {
     type: Boolean
@@ -37,11 +32,23 @@ const postBook = new Schema({
   Type: {
     type: String
   },
+  Name: {
+    type: String
+  },
   Detail: {
     type: Object
+  },
+  Area: {
+    type: String
+  },
+  Student: {
+    type: Object
+  },
+  TeacherHR: {
+    type: String
   }
-})
+}, { versionKey: false })
 
-const PostBook = models.book || model('book', postBook)
+const PostProject = models.project || model('project', postProject)
 
-export default PostBook
+export default PostProject

@@ -1,5 +1,5 @@
 import connectDB from '@/config/database';
-import PostCourse from '@/models/postCourse';
+import PostCourse from '@/models/postProject';
 import { authenticate } from '@/utils/authenticate';
 import { NextResponse } from 'next/server';
 

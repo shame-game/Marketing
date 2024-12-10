@@ -1,4 +1,4 @@
-import postCourse from "../../../models/postCourse";
+import postCourse from "../../../models/postProject";
 import connectDB from "../../../config/database";
 
 export async function GetAllCourse() {
