@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import connectDB from '@/config/database';
-import PostModel from "@/models/postModels";
+import PostModel from "@/models/postTask";
 
 export const preferredRegion = process.env.area
 
@@ -18,7 +18,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status')
     const Student = await PostModel.find({ Status: status })
-    
+
     // Xử lý
     return NextResponse.json({ air: 2, data: Student }, { status: 201 })
   } catch (error) { return NextResponse.json({ error: error }, { status: 500 }) }

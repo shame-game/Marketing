@@ -1,5 +1,5 @@
 import connectDB from '@/config/database';
-import PostModel from '@/models/postModels';
+import PostModel from '@/models/postTask';
 import { authenticate } from '@/utils/authenticate';
 import { NextResponse } from 'next/server';
 

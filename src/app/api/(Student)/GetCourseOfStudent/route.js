@@ -1,7 +1,7 @@
 
 
 import connectDB from '@/config/database';
-import PostModel from "@/models/postModels";
+import PostModel from "@/models/postTask";
 
 export async function GET(request) {
   try {

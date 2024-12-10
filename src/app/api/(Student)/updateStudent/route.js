@@ -1,4 +1,4 @@
-import PostModel from "@/models/postModels";
+import PostModel from "@/models/postTask";
 import connectDB from "@/config/database";
 
 // api cập nhập thông tin học sinh

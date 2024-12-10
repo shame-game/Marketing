@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/config/database';
 import PostInvoices from '@/models/postInvoices';
-import PostModel from '@/models/postModels';
+import PostModel from '@/models/postTask';
 import { authenticate } from '@/utils/authenticate';
 
 

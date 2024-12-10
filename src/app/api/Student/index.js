@@ -1,4 +1,4 @@
-import postModel from "@/models/postModels";
+import postModel from "@/models/postTask";
 import connectDB from "@/config/database";
 
 

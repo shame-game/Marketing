@@ -1,5 +1,5 @@
 import PostCourse from "../../../models/postCourse";
-import PostModel from "../../../models/postModels";
+import PostModel from "../../../models/postTask";
 import connectDB from "../../../config/database";
 
 export async function POST(request) {

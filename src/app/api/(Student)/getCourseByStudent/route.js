@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import PostCourse from '@/models/postCourse';
-import PostModel from '@/models/postModels';
+import PostModel from '@/models/postTask';
 import connectDB from '@/config/database';
 import fetch from 'node-fetch'; // Ensure node-fetch is installed
 

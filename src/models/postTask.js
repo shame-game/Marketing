@@ -1,6 +1,6 @@
 import { Schema, model, models } from 'mongoose'
 
-const postSchema = new Schema({
+const postTask = new Schema({
   ID: {
     type: String,
     required: true,
@@ -46,6 +46,6 @@ const postSchema = new Schema({
   }
 }, { versionKey: false })
 
-const PostModel = models.student || model('student', postSchema)
+const PostTask = models.task || model('task', postTask)
 
-export default PostModel
+export default PostTask
