@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import Autocomplete from '@mui/material/Autocomplete';
-import ButtonCreate from "@/app/(Main)/(Student)/student/createStudent"
+import ButtonCreate from "@/app/student/createStudent"
 import CustomPaginationActionsTable from "@/components/UI/(Student)/ListStudent"
 
 const Area_ = ['Biên Hòa', 'Long Thành', 'Long Khánh'];

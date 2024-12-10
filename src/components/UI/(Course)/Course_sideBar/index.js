@@ -7,7 +7,7 @@ import LocalLibraryRoundedIcon from '@mui/icons-material/LocalLibrary';
 import CourseWrapCoursePresent from '@/components/UI/(Course)/Course_sideBar/sever/Course_wrapCoursePresent';
 import Nav from './sever/index';
 import None from './sever/none';
-import BtAddCourse from '@/app/(Main)/(Course)/ui/addCourse';
+import Bt_Add_Course from '../Course_create';
 import TextField from '@mui/material/TextField';
 
 export default function CourseSideBar({ data = [], data_book = [] }) {
@@ -153,7 +153,7 @@ function SearchBar({ data_book, status }) {
         size="small"
         sx={{ mr: 2, width: '400px', color: 'var(--main)' }}
       />
-      {status && <BtAddCourse data_book={data_book.allBook} />}
+      {status && <Bt_Add_Course data_book={data_book.allBook} />}
     </Box>
   );
 }

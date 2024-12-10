@@ -10,7 +10,7 @@ import Dialog from "@mui/material/Dialog";
 import Box from '@mui/material/Box';
 import As from '@/components/UI/(Student)/Chart';
 
-export default function RootLayout() {
+export default function Task() {
   const [open, setopen] = useState(false)
   const handleClose = () => setopen(false)
 

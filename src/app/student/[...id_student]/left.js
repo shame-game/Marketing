@@ -1,6 +1,6 @@
 import { Box, Avatar, Typography, Divider } from '@mui/material';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
-import UpdateStudent from '../../../../../components/UI/(Student)/updateStudent'
+import UpdateStudent from '../../../components/UI/(Student)/updateStudent'
 export default function Left({ children }) {
   console.log(children);
 

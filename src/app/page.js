@@ -10,5 +10,8 @@ export default function Overview() {
   } else {
     role = ''
   }
-  return (<>{role ? role.role.ID == 'MG' ? <Page_Overview_Manage /> : <>Xin chào {role.Name}</> : null}</>)
+  return (<>{role ? role.role.ID == 'MG' ?
+    <Page_Overview_Manage />
+    : <>Xin chào {role.Name}</>
+    : null}</>)
 }

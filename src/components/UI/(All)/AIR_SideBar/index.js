@@ -7,7 +7,12 @@ import Nav from './Nav';
 import Logo from '../Logo';
 
 export default function SideBar({ data }) {
-  let path = data.Role.Router
+  let path = {
+    "/": "Công việc",
+    "/calendar": "Lịch làm việc",
+    "/project": "Dự án",
+    "/personnel": "Nhân sự",
+  }
 
   const [expanded, setExpanded] = useState(false);
   const pathname = usePathname();
