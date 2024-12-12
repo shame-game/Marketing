@@ -10,6 +10,7 @@ export default function SideBar({ data }) {
   let path = {
     "/": "Công việc",
     "/calendar": "Lịch làm việc",
+    "/progress": "Mô tả dự án"
   }
 
   const [expanded, setExpanded] = useState(false);

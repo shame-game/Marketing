@@ -62,7 +62,7 @@ export async function POST(request) {
         path: '/',
         maxAge: 60 * 60 * 24 * 365 * 10
       });
-      return new Response(JSON.stringify({ air: 0, data: newPost, mes: 'Đăng nhập thành công' }), {
+      return new Response(JSON.stringify({ air: 0, data, mes: 'Đăng nhập thành công' }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });

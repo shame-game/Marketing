@@ -37,7 +37,7 @@ export default function Login() {
         let d = await res.json()
         console.log(d);
 
-        // window.location.reload()
+        window.location.reload()
         setIsLoading(false)
       }
     } catch (error) {

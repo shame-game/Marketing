@@ -7,6 +7,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import WorkIcon from '@mui/icons-material/Work';
+import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 
 export default function Nav({ expanded, text, action }) {
   let icon = ''
@@ -42,7 +43,7 @@ export default function Nav({ expanded, text, action }) {
     }} />)
   }
   else {
-    icon = (<AssignmentIcon sx={{
+    icon = (<AnalyticsRoundedIcon sx={{
       height: '25px',
       color: 'inherit',
       transition: 'all .3s linear'
