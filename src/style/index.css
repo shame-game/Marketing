@@ -399,3 +399,67 @@ a {
 
   }
 }
+
+.iconWrap {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconWrap:hover {
+  cursor: pointer;
+  background-color: var(--background_1);
+}
+
+
+.custom-checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+}
+
+.custom-checkbox input {
+  display: none;
+  /* Ẩn checkbox mặc định */
+}
+
+.custom-checkbox .checkmark {
+  position: relative;
+  height: 16px;
+  width: 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  box-shadow: var(--box);
+}
+
+.tesst:hover {
+  background-color: var(--background_1);
+  cursor: pointer;
+  transition: all .3s linear;
+}
+
+.custom-checkbox .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 50%;
+  top: 40%;
+  width: 3px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.custom-checkbox input:checked+.checkmark::after {
+  display: block;
+}

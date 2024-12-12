@@ -1,32 +1,36 @@
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import Header from '@/components/UI/(All)/AIR_Header';
 import SideBar from '@/components/UI/(All)/AIR_SideBar';
-import Login from '@/components/UI/(Auth)/Login';
+import Login from '@/page/Login';
 import '@/style/index.css';
 import Box from '@mui/material/Box';
 import { cookies } from 'next/headers';
 
+export const metadata = {
+  title: 'Digi Marketing - Tasks'
+}
+
 export default async function RootLayout({ children }) {
-  // const token = cookies().get('u')?.value;
+  const token = cookies().get('airobotic')?.value;
 
-  // const response = await fetch(`http://localhost:3000/api/CheckUser`, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${token}`,
-  //   },
-  //   body: JSON.stringify({ source: 1 }),
-  //   cache: 'no-store'
-  // });
+  const response = await fetch(`${process.env.URL}/api/CheckUser`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ source: 1 }),
+    cache: 'no-store'
+  });
 
-  // let data = null;
+  let data = null;
 
-  // if (response.ok) {
-  //   const result = await response.json();
-  //   if (result.air === 2) {
-  //     data = result.data;
-  //   }
-  // }
+  if (response.ok) {
+    const result = await response.json();
+    if (result.air === 2) {
+      data = result.data;
+    }
+  }
 
   return (
     <html lang="en">

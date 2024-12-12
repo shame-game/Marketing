@@ -12,26 +12,23 @@ export default async function CheckToken(request) {
   }
   try {
     if (source) {
-      // Trường hợp gọi từ server, lấy token từ Authorization Header
       const authHeader = request.headers.get('authorization');
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return { error: 'Token không được cung cấp trong header' };
       }
       token = authHeader.split(' ')[1];
     } else {
-      // Trường hợp gọi từ client, lấy token từ cookies httponly
-      token = request.cookies.get('u')?.value;
+      token = request.cookies.get('airobotic')?.value;
       if (!token) {
         return { error: 'Token không được cung cấp trong cookie' };
       }
     }
 
-    // Kiểm tra token
     let decodedToken;
     try {
       decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
-      return { error: 'Token không hợp lệ hoặc đã hết hạn' };
+      return { error: 'Token không hợp lệ hoặc đã hết hạn ' + token };
     }
 
     return { user: decodedToken, body: body };

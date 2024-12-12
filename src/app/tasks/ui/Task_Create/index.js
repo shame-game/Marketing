@@ -9,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import fetchApi from '@/utils/API_suport/fetchData';
 
-export default function Personnal_Add_User() {
+export default function Task_Create() {
   const [isLoading, setIsLoading] = useState(false);
   const fields = [
     {
@@ -50,9 +50,7 @@ export default function Personnal_Add_User() {
 
   const handleSave = async (data) => {
     setIsLoading(true)
-    try {
-      await fetchApi('/User_Create/c_user', { method: 'POST', body: JSON.stringify(data) });
-    } catch (error) { console.log(error) }
+    console.log(data);
     setIsLoading(false)
   };
 
@@ -62,10 +60,10 @@ export default function Personnal_Add_User() {
         <Popup_Form
           button={
             <Button sx={{ background: 'var(--main)' }} variant="contained" startIcon={<AddBoxRoundedIcon sx={{ color: 'white', fontSize: 30 }} />}>
-              Thêm Người Dùng
+              Tạo công việc
             </Button>
           }
-          title="Tạo người dùng mới"
+          title="Tạo công việc"
           fields={fields}
           onSave={handleSave}
         />

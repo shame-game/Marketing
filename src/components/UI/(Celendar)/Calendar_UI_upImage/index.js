@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog'
 import ImageIcon from '@mui/icons-material/Image'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 import styles from './index.module.css'
-import { SVG_image, SVG_x } from '@/svg'
+import { SVG_image, SVG_x } from '@/components/svg'
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import '@/style/index.css'

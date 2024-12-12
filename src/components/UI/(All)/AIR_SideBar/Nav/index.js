@@ -4,11 +4,9 @@ import ListItem from '@mui/material/ListItem';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import EventNoteRoundedIcon from '@mui/icons-material/EventNoteRounded';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
-import DashboardCustomizeRoundedIcon from '@mui/icons-material/DashboardCustomizeRounded';
+import WorkIcon from '@mui/icons-material/Work';
 
 export default function Nav({ expanded, text, action }) {
   let icon = ''
@@ -18,8 +16,8 @@ export default function Nav({ expanded, text, action }) {
       color: 'inherit',
       transition: 'all .3s linear'
     }} />)
-  } else if (action[1] == '/course') {
-    icon = (<CollectionsBookmarkRoundedIcon sx={{
+  } else if (action[1] == '/project') {
+    icon = (<WorkIcon sx={{
       height: '25px',
       color: 'inherit',
       transition: 'all .3s linear'
@@ -31,26 +29,13 @@ export default function Nav({ expanded, text, action }) {
       transition: 'all .3s linear'
     }} />)
   } else if (action[1] == '/') {
-    icon = (<DashboardRoundedIcon sx={{
-      height: '25px',
-      color: 'inherit',
-      transition: 'all .3s linear'
-    }} />)
-  } else if (action[1] == '/progress') {
-    icon = (<AnalyticsRoundedIcon sx={{
+    icon = (<AssignmentIcon sx={{
       height: '25px',
       color: 'inherit',
       transition: 'all .3s linear'
     }} />)
   } else if (action[1] == '/personnel') {
     icon = (<AssignmentIndRoundedIcon sx={{
-      height: '25px',
-      color: 'inherit',
-      transition: 'all .3s linear'
-    }} />)
-  }
-  else if (action[1] == '/more') {
-    icon = (<DashboardCustomizeRoundedIcon sx={{
       height: '25px',
       color: 'inherit',
       transition: 'all .3s linear'
