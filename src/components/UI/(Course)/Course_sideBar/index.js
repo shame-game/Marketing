@@ -7,7 +7,6 @@ import LocalLibraryRoundedIcon from '@mui/icons-material/LocalLibrary';
 import CourseWrapCoursePresent from '@/components/UI/(Course)/Course_sideBar/sever/Course_wrapCoursePresent';
 import Nav from './sever/index';
 import None from './sever/none';
-import Bt_Add_Course from '../Course_create';
 import TextField from '@mui/material/TextField';
 
 export default function CourseSideBar({ data = [], data_book = [] }) {
@@ -25,14 +24,14 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
 
   const tabs = [
     {
-      label: 'Khóa học đang học',
+      label: 'Dự án đang thực hiện',
       icon: <CollectionsBookmarkRoundedIcon />,
       count: courseCounts.inProgress,
       status: tabValue === 0,
       onClick: () => setTabValue(0),
       content: (
         <>
-          {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />}
+          {/* {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />} */}
           {courseCounts.inProgress ? (
             <CourseWrapCoursePresent data={data.filter((item) => !item.Status)} />
           ) : (
@@ -42,14 +41,14 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
       ),
     },
     {
-      label: 'Khóa học hoàn thành',
+      label: 'Dự án hoàn thành',
       icon: <BookmarkAddedRoundedIcon />,
       count: courseCounts.completed,
       status: tabValue === 1,
       onClick: () => setTabValue(1),
       content: (
         <>
-          {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />}
+          {/* {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />} */}
           {courseCounts.completed ? (
             <CourseWrapCoursePresent
               data={data.filter(
@@ -63,7 +62,7 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
       ),
     },
     {
-      label: 'Chương trình học',
+      label: 'Dự án trễ',
       icon: <LocalLibraryRoundedIcon />,
       count: courseCounts.program,
       status: tabValue === 2,
@@ -71,14 +70,14 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
       content: courseCounts.program ? <>Có tồn tại</> : <None />,
     },
     {
-      label: 'Khóa ôn luyện',
+      label: 'Dự án trễ',
       icon: <LocalLibraryRoundedIcon />,
       count: courseCounts.review,
       status: tabValue === 3,
       onClick: () => setTabValue(3),
       content: (
         <>
-          {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />}
+          {/* {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />} */}
           {courseCounts.completed ? (
             <CourseWrapCoursePresent
               data={data.filter(

@@ -8,9 +8,10 @@ import Logo from '../Logo';
 
 export default function SideBar({ data }) {
   let path = {
-    "/": "Công việc",
-    "/calendar": "Lịch làm việc",
-    "/progress": "Mô tả dự án"
+    "/": "Tasks",
+    "/calendar": "Calendar",
+    "/project": "Project",
+    "/progress": "Help"
   }
 
   const [expanded, setExpanded] = useState(false);
