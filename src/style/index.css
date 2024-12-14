@@ -400,7 +400,8 @@ a {
   }
 }
 
-.iconWrap {
+.iconWrap,
+.iconWrap2 {
   width: 35px;
   height: 35px;
   border-radius: 50%;
@@ -412,6 +413,11 @@ a {
 .iconWrap:hover {
   cursor: pointer;
   background-color: var(--background_1);
+}
+
+.iconWrap2:hover {
+  cursor: pointer;
+  background-color: rgb(163, 238, 163);
 }
 
 

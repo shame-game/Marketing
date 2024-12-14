@@ -1,51 +1,45 @@
-'use client'
-
-import { useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import Wrap_table from './ui/Task_Read/Task_Wrap';
-import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 import Box from '@mui/material/Box';
+import { Task_Read_all } from '@/data'
 
 export default function Task() {
-  const [tabValue, setTabValue] = useState(0);
+  const dataTask = Task_Read_all()
   let g = [[], [], []]
-
+  dataTask.forEach(e => {
+    if (e.Check) {
+      g[0] = g[0].concat(e)
+    } else if (e.DoerDone) {
+      g[1] = g[1].concat(e)
+    } else {
+      g[2] = g[2].concat(e)
+    }
+  });
   return (
     <>
       <Grid container spacing={2} sx={{ m: 0 }}>
         <Grid xs={3} sx={{ position: 'relative' }}>
-          <div onClick={() => { setTabValue(0) }}>
+          <div >
             <Box_2_Student session='Tổng công việc'
-              value={12} context='Tổng số công việc đã tạo' color='var(--main)' status={tabValue == 0 ? true : false} />
-          </div>
-          {/* <AssessmentRoundedIcon
-            className='plus-icon'
-            sx={{
-              fontSize: 28,
-              color: 'var(--main)',
-              backgroundColor: "whitesmoke",
-              borderRadius: "50%",
-              padding: .8,
-              border: `thin solid var(--main)`,
-              transition: 'all .2s linear'
-            }} /> */}
-        </Grid>
-        <Grid xs={3} sx={{ position: 'relative' }}>
-          <div onClick={() => { setTabValue(1) }}>
-            <Box_2_Student session='Đã hoàn thành' value={g[0].length} context='Tổng số công việc đã hoàn thành' color='#38d200' status={tabValue == 1 ? true : false} />
+              value={dataTask.length} context='Tổng số công việc đã tạo' color='var(--main)' status={true} />
           </div>
         </Grid>
         <Grid xs={3} sx={{ position: 'relative' }}>
-          <div onClick={() => { setTabValue(2) }}>
-            <Box_2_Student session='Đang thực hiện' value={g[1].length} context='Tổng số công việc đang thực hiện' color='#f5a623' status={tabValue == 2 ? true : false} />
+          <div  >
+            <Box_2_Student session='Đã kiểm duyệt' value={g[0].length} context='Tổng số công việc đã kiểm duyệt' color='var(--main)' />
           </div>
         </Grid>
         <Grid xs={3} sx={{ position: 'relative' }}>
-          <div onClick={() => { setTabValue(3) }}>
-            <Box_2_Student session='Bị trễ' value={g[2].length} context='Tổng số công việc bị trễ' color='#d20000' status={tabValue == 3 ? true : false} />
+          <div  >
+            <Box_2_Student session='Đã hoàn thành' value={g[1].length} context='Tổng số công việc hoàn thành chưa duyệt' color='#38d200' />
           </div>
         </Grid>
-        <Grid xs={12} sx={{ p: 1 }}><Wrap_table /></Grid>
+        <Grid xs={3} sx={{ position: 'relative' }}>
+          <div  >
+            <Box_2_Student session='Đang thực hiện' value={g[2].length} context='Tổng số công việc đang thực hiện' color='#f5a623' />
+          </div>
+        </Grid>
+        <Grid xs={12} sx={{ p: 1 }}><Wrap_table dataTasks={dataTask} /></Grid>
       </Grid>
     </>
   );
