@@ -21,7 +21,7 @@ export default async function Task() {
     } else {
       g[2] = g[2].concat(e)
     }
-  }) : null
+  }) : dataTask = []
 
   return (
     <>

@@ -8,7 +8,7 @@ export default async function fetchApi(endpoint, options = {}) {
     try {
       const { cookies } = await import('next/headers');
       const cookieStore = cookies();
-      token = cookieStore.get('u')?.value || null;
+      token = cookieStore.get('airobotic')?.value || null;
     } catch (error) { 
       console.warn('Không thể lấy cookies trên server:', error);
     }
