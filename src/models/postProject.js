@@ -41,7 +41,7 @@ const postProject = new Schema({
     type: String
   },
   leader: {
-    type: Schema.Types.ObjectId,
+    type: Array,
   },
   status: {
     type: String

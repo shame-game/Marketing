@@ -1,7 +1,7 @@
 import vam from './index.module.css'
 
 export default function AIR_BoxCourse({ data, department }) {
-  console.log(data);
+  console.log(data.leader);
   
   return (
     <div className={vam.wrap}>
@@ -19,6 +19,7 @@ export default function AIR_BoxCourse({ data, department }) {
           {data.createdAt.split('T')[0].slice(-5, -3)}/{data.createdAt.split('T')[0].slice(0, 4)}</span>
       </div>
       <div style={{ display: 'flex', gap: 5, marginBottom: 6 }}>
+        <span style={{ color: 'var(--text)' }}>Số lượng quản lý: {data.leader}</span>
         <span style={{ color: 'var(--text)' }}>Số lượng thành viên: {data.members.length}</span>
         <span style={{ color: 'var(--text_400)' }}> Thành viên</span>
       </div>
