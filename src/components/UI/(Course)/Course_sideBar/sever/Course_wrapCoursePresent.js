@@ -1,4 +1,5 @@
 import AIR_BoxCourse from "@/components/UI/(Course)/AIR_BoxCourse"
+import { Height } from "@mui/icons-material";
 import Grid from "@mui/material/Grid"
 
 export default function Course_wrapCoursePresent({ data, department }) {
@@ -11,7 +12,10 @@ export default function Course_wrapCoursePresent({ data, department }) {
             depa = department[i]
           }
         }
-        return <Grid key={index} item xs={3}><AIR_BoxCourse data={e} department={depa} /></Grid>
+        return (
+          <Grid key={index} item xs={3} sx={{ display: 'flex', flexDirection: 'column' }}>
+            <AIR_BoxCourse data={e} department={depa} />
+          </Grid>)
       })}
     </Grid>
   )

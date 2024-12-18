@@ -1,5 +1,4 @@
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
-import Header from '@/components/UI/(All)/AIR_Header';
 import SideBar from '@/components/UI/(All)/AIR_SideBar';
 import Login from '@/page/Login';
 import '@/style/index.css';
@@ -38,14 +37,14 @@ export default async function RootLayout({ children }) {
         <AppRouterCacheProvider>
           {data ? (
             <div style={{ height: '100%', width: '100%' }}>
-              <SideBar data={data} />
+              <SideBar data={data} token={token} />
               <div style={{ marginLeft: '72px', height: '100%' }}>
-                <Header data={data} />
+            
                 <Box
                   sx={{
-                    height: 'calc(100% - 88px)',
+                    height: 'calc(100% - 40px)',
                     width: 'calc(100% - 64px)',
-                    padding: '8px 32px 8px 32px',
+                    padding: '32px 32px 8px 32px',
                     overflow: 'hidden',
                     overflowY: 'auto',
                     '&::-webkit-scrollbar': { width: '0' },
