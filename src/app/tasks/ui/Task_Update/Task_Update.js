@@ -8,7 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import fetchApi from '@/utils/API_suport/fetchData';
 
-export default function Task_Create({ dataType, dataProject, token, user }) {
+export default function Task_Update({ dataType, dataProject, token, user, button }) {
   const type = dataType.map(item => ({
     label: item.name,
     value: item.id
@@ -109,11 +109,7 @@ export default function Task_Create({ dataType, dataProject, token, user }) {
     <>
       <Box sx={{ width: 'max-content', height: '100%' }}>
         <Popup_Form
-          button={
-            <div className='flexCenter' style={{ height: 39, background: 'var(--main)', p: 0, borderRadius: 3, cursor: 'pointer', color: 'white', padding: '0 16px', gap: 8 }} >
-              <AddBoxRoundedIcon sx={{ color: 'white', fontSize: 18 }} /> Thêm công việc
-            </div>
-          }
+          button={ button }
           title="Tạo công việc"
           fields={fields}
           onSave={handleSave}

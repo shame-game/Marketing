@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -20,17 +20,18 @@ const Status_ = ["Đã hoàn thành", "Chưa hoàn thành", "Đã kiểm duyệt
 
 export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token, user }) {
   const TaskTypeOptions = dataTaskType.map((type) => ({ name: type.name, id: type._id }));
-  // Tạo mảng kết quả (dự án) kèm số task
   const taskCountMap = {};
-  dataTasks.forEach(t => {
+
+  dataTasks ? dataTasks.forEach(t => {
     if (!taskCountMap[t.project]) taskCountMap[t.project] = 0;
     taskCountMap[t.project]++;
-  });
+  }) : null
 
   const result = dataProject.map(proj => {
     return {
       name: proj.name,
       id: proj._id,
+      leader: proj.leader,
       tasks: taskCountMap[proj._id] || 0
     };
   });
@@ -41,6 +42,7 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
   const [searchQuery, setSearchQuery] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
 
   // Lọc dữ liệu
   const filteredData = useMemo(() => {
@@ -61,8 +63,6 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
           if (!task.doerDone) return false;
         }
       }
-
-      console.log(Type);
 
       if (Type && task.taskCategory !== Type) return false;
 
@@ -94,7 +94,6 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
       return true;
     });
   }, [dataTasks, selectedAreas, Status, Type, searchQuery, startDate, endDate, dataProject]);
-
   const handleClearFilters = () => {
     setSelectedAreas([]);
     setStatus(null);
@@ -178,7 +177,7 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
           </Stack>
 
           <Stack direction="row" spacing={2}>
-            <Task_Create dataType={TaskTypeOptions} dataProject={result}  token={token} user={user.id} />
+            <Task_Create dataType={TaskTypeOptions} dataProject={result} token={token} user={user.id} />
             {(selectedAreas.length > 0 || Status || Type || searchQuery || startDate || endDate) && (
               <div onClick={handleClearFilters} className='flexCenter' style={{ height: 39, background: 'var(--main)', p: 0, borderRadius: 3, cursor: 'pointer', color: 'white', padding: '0 16px', gap: 8 }} >
                 <FindReplaceIcon />Làm mới
@@ -241,14 +240,14 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
         <Box sx={{ color: 'white', fontSize: '14px', fontWeight: '500', flex: '2' }}>TÊN CÔNG VIỆC</Box>
         <Box sx={{ color: 'white', fontSize: '14px', fontWeight: '500', flex: '1' }}>BẮT ĐẦU</Box>
         <Box sx={{ color: 'white', fontSize: '14px', fontWeight: '500', flex: '1' }}>KẾT THÚC</Box>
-        <Box sx={{ color: 'white', fontSize: '14px', fontWeight: '500', flex: '.7' }}>LOẠI</Box>
+        <Box sx={{ color: 'white', fontSize: '14px', fontWeight: '500', flex: '.9' }}>LOẠI</Box>
         <Box sx={{ color: 'white', fontSize: '14px', fontWeight: '500', flex: '1' }}>NGƯỜI KIỂM DUYỆT</Box>
         <Box sx={{ color: 'white', fontSize: '14px', fontWeight: '500', flex: '.7', textAlign: 'center' }}>TRẠNG THÁI</Box>
         <Box sx={{ color: 'white', fontSize: '14px', fontWeight: '500', flex: '.3', textAlign: 'center' }}>THÊM</Box>
       </Box>
 
       {/* Danh sách task */}
-      <Task_Read_List student={filteredData} />
+      <Task_Read_List student={filteredData} type={dataTaskType}  dataType={TaskTypeOptions} dataProject={result} token={token} user={user.id}/>
     </Box>
   );
 }

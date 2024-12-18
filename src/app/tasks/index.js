@@ -1,21 +1,19 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import Wrap_table from './ui/Task_Read/Task_Wrap';
 import Box from '@mui/material/Box';
-import { Project_Read_all, Task_Read_all, Task_Read_Type } from '@/data'
+import { Project_Read_all, Task_Read_all, Task_Read_Type } from '@/app/data'
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
 export default async function Task() {
   const cookieStore = cookies();
   const token = cookieStore.get('airobotic');
-
   const user = jwt.verify(token.value, process.env.JWT_SECRET)
-
-  const dataTask = Task_Read_all()
+  let dataTask = await Task_Read_all()
   const dataProject = Project_Read_all()
-  const dataTaskType = Task_Read_Type()
+  const dataTaskType = await Task_Read_Type()
   let g = [[], [], []]
-  dataTask.forEach(e => {
+  dataTask ? dataTask.forEach(e => {
     if (e.checkerDone) {
       g[0] = g[0].concat(e)
     } else if (e.doerDone) {
@@ -23,7 +21,8 @@ export default async function Task() {
     } else {
       g[2] = g[2].concat(e)
     }
-  });
+  }) : null
+
   return (
     <>
       <Grid container spacing={2} sx={{ m: 0 }}>

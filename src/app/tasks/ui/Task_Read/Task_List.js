@@ -16,9 +16,10 @@ import AssignmentTurnedInRoundedIcon from '@mui/icons-material/AssignmentTurnedI
 import LibraryAddCheckRoundedIcon from '@mui/icons-material/LibraryAddCheckRounded';
 import TablePagination from '@mui/material/TablePagination';
 import Dialog from '@mui/material/Dialog';
-import { Project_Read_all, Task_Read_Type, User_Read_all } from '@/data';
-export default function Task_Read_List({ student }) {
+import { Project_Read_all, Task_Read_Type, User_Read_all } from '@/app/data';
+import Task_Update from '../Task_Update/Task_Update';
 
+export default function Task_Read_List({ student, type, dataType, dataProject, token, user }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -38,7 +39,7 @@ export default function Task_Read_List({ student }) {
   return (
     <Box sx={{ width: '100%' }}>
       {currentStudents.map((student, index) => (
-        <UI_Student_List key={index} data={student} />
+        <UI_Student_List key={index} data={student} types={type} dataType={dataType} dataProject={dataProject} token={token} user={user} />
       ))}
       <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, borderTop: 'thin solid var(--background_1)' }}>
         <TablePagination
@@ -54,13 +55,21 @@ export default function Task_Read_List({ student }) {
   );
 }
 
-function UI_Student_List({ data }) {
-  let user = User_Read_all()
+function UI_Student_List({ data, types, dataType, dataProject, token, user }) {
+  let startDate = data.startDate.split('T')[0].slice(-2) + '/' +
+    data.startDate.split('T')[0].slice(-5, -3) + '/' + data.startDate.split('T')[0].slice(0, 4)
+  let endDate = data.endDate.split('T')[0].slice(-2) + '/' +
+    data.endDate.split('T')[0].slice(-5, -3) + '/' + data.endDate.split('T')[0].slice(0, 4)
+  let users = User_Read_all()
   let project = Project_Read_all()
-  let type = Task_Read_Type()
-  type.forEach(t => { if (t._id == data.taskCategory) type = t.name })
+  let type = types
+  type.forEach(t => {
+    if (t._id.toLowerCase() == data.taskCategory.toLowerCase()) type = t.name
+  })
   project.forEach(t => { if (t._id == data.project) project = t.name })
-  user.forEach(t => { if (t._id == data.checker) user = t.Name })
+  users.forEach(t => { if (t._id == data.checker) users = t.Name })
+
+  if (typeof (type) == 'object') type = 'Không xác định'
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [detail, setdetail] = useState(false);
@@ -101,18 +110,16 @@ function UI_Student_List({ data }) {
             <p>{data.name}</p>
           </Box>
           <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
-            <p>{data.startDate.split('T')[0].slice(-2)}/
-              {data.startDate.split('T')[0].slice(-5, -3)}/{data.startDate.split('T')[0].slice(0, 4)}</p>
+            <p>{startDate}</p>
           </Box>
           <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
-            <p>{data.endDate.split('T')[0].slice(-2)}/
-              {data.endDate.split('T')[0].slice(-5, -3)}/{data.endDate.split('T')[0].slice(0, 4)}</p>
+            <p>{endDate}</p>
           </Box>
-          <Box sx={{ flex: '.7', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
+          <Box sx={{ flex: '.9', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
             <p>{type}</p>
           </Box>
           <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
-            <p>{user}</p>
+            <p>{users}</p>
           </Box>
           <Box sx={{ flex: '.7', display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center' }}>
             <Tooltip title="Hoàn thành">
@@ -182,12 +189,12 @@ function UI_Student_List({ data }) {
               </ListItemIcon>
               Xem chi tiết
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <Task_Update button={<MenuItem >
               <ListItemIcon>
                 <BorderColorRoundedIcon fontSize="small" />
               </ListItemIcon>
               Sửa công việc
-            </MenuItem>
+            </MenuItem>} dataType={dataType} dataProject={dataProject} token={token} user={user} />
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <AssignmentTurnedInRoundedIcon fontSize="small" />
@@ -216,7 +223,7 @@ function UI_Student_List({ data }) {
         open={detail}
         onClose={detailClose}
       >
-        <Box className="Title_Popup" sx={{ p: 2, borderBottom: 'thin solid var(--background_1)' }}>Chi tiết công việc</Box>
+        <Box className="Title_Popup" sx={{ p: 2, borderBottom: 'thin solid var(--background_1)' }}>Công việc thuộc dự án {project}</Box>
         <Box sx={{ p: 2, bgcolor: 'var(--background)', pt: 1, maxHeight: '80vh' }} >
           <div style={{ flex: 1 }}>
             <p className="Title_Popup" style={{ padding: '4px 0 12px 0' }}>Thông tin</p>
@@ -224,13 +231,15 @@ function UI_Student_List({ data }) {
               display: 'flex', gap: 8, flexDirection: 'column', padding: 12,
               border: 'thin solid var(--background_1)', borderRadius: 3, background: 'white'
             }}>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Công việc:</p> {data.Task}</div>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Thời gian thực hiện: </p>{data.Start == data.End ? data.Start : `${data.Start} - ${data.End}`}</div>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Chi tiết công việc:</p> {data.Detail}</div>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Ghi chú: </p>{data.Note}</div>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Loại công việc:</p> {data.Type}</div>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Trạng thái: </p>{data.Check}</div>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Người kiểm duyệt:</p> {data.DoerDetail}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Công việc:</p> {data.name}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>
+                Thời gian thực hiện: </p>{startDate == endDate ? startDate : `${startDate} - ${startDate}`}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Chi tiết công việc:</p> {data.detail}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Loại công việc:</p> {type}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Trạng thái hoàn thành: </p>{data.doerDone ? 'Hoàn thành' : 'Chưa hoàn thành'}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Trạng thái kiểm duyệt: </p>{data.checkerDone ? 'Đã duyệt' : 'Chưa duyệt'}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Người kiểm duyệt:</p> {user}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Ghi chú: </p>{data.notes}</div>
             </div>
           </div>
           <p className="Title_Popup" style={{ margin: '12px 0 12px 0' }}>Tài nguyên</p>
