@@ -22,7 +22,6 @@
     "cookie": "^1.0.1",
     "dayjs": "^1.11.13",
     "formidable": "^3.5.2",
-    "googleapis": "^144.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.1",
     "mongoose": "^8.6.1",
