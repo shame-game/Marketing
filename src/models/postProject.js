@@ -34,14 +34,17 @@ const postProject = new Schema({
   linkDrive: {
     type: String
   },
-  members:{
+  members: {
     type: Array
   },
-  calendarId:{
+  calendarId: {
     type: String
   },
   leader: {
     type: Schema.Types.ObjectId,
+  },
+  status: {
+    type: String
   }
 })
 

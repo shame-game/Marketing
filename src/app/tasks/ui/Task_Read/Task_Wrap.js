@@ -18,7 +18,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const Status_ = ["Đã hoàn thành", "Chưa hoàn thành", "Đã kiểm duyệt", "Chưa kiểm duyệt"];
 
-export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token, user }) {
+export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token, user, users }) {
   const TaskTypeOptions = dataTaskType.map((type) => ({ name: type.name, id: type._id }));
   const taskCountMap = {};
 
@@ -247,7 +247,7 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
       </Box>
 
       {/* Danh sách task */}
-      <Task_Read_List student={filteredData} project={dataProject} type={dataTaskType}  dataType={TaskTypeOptions} dataProject={result} token={token} user={user.id}/>
+      <Task_Read_List users={users} student={filteredData} project={dataProject} type={dataTaskType} dataType={TaskTypeOptions} dataProject={result} token={token} user={user.id} />
     </Box>
   );
 }

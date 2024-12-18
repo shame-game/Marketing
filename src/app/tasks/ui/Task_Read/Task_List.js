@@ -16,13 +16,13 @@ import AssignmentTurnedInRoundedIcon from '@mui/icons-material/AssignmentTurnedI
 import LibraryAddCheckRoundedIcon from '@mui/icons-material/LibraryAddCheckRounded';
 import TablePagination from '@mui/material/TablePagination';
 import Dialog from '@mui/material/Dialog';
-import { Project_Read_all, User_Read_all } from '@/app/data';
 import Popup_Form from '@/utils/Extensions_UI/Popup_Form';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
+import Link from 'next/link';
 
 
-export default function Task_Read_List({ student, type, dataType, dataProject, token, user, project }) {
+export default function Task_Read_List({ student, type, dataType, dataProject, token, user, project, users }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -42,7 +42,7 @@ export default function Task_Read_List({ student, type, dataType, dataProject, t
   return (
     <Box sx={{ width: '100%' }}>
       {currentStudents.map((student, index) => (
-        <UI_Student_List key={index} data={student} types={type} dataType={dataType} project={project} dataProject={dataProject} token={token} user={user} />
+        <UI_Student_List key={index} userss={users} data={student} types={type} dataType={dataType} project={project} dataProject={dataProject} token={token} user={user} />
       ))}
       <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, borderTop: 'thin solid var(--background_1)' }}>
         <TablePagination
@@ -58,12 +58,12 @@ export default function Task_Read_List({ student, type, dataType, dataProject, t
   );
 }
 
-function UI_Student_List({ data, types, dataType, dataProject, token, user, project }) {
+function UI_Student_List({ data, types, dataType, userss, token, user, project }) {
   let startDate = data.startDate.split('T')[0].slice(-2) + '/' +
     data.startDate.split('T')[0].slice(-5, -3) + '/' + data.startDate.split('T')[0].slice(0, 4)
   let endDate = data.endDate.split('T')[0].slice(-2) + '/' +
     data.endDate.split('T')[0].slice(-5, -3) + '/' + data.endDate.split('T')[0].slice(0, 4)
-  let users = User_Read_all()
+  let users = userss
   let projects = project
   let type = types
   type.forEach(t => {
@@ -74,6 +74,7 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user, proj
 
   if (typeof (type) == 'object') type = 'Không xác định'
   if (typeof (projects) == 'object') projects = 'Không xác định'
+  if (typeof (users) == 'object') users = 'Không xác định'
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [detail, setdetail] = useState(false);
@@ -88,6 +89,7 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user, proj
 
   const openDetail = () => setdetail(true)
   const detailClose = () => setdetail(false)
+  console.log(users);
 
 
   // Sửa thông tin công việc 
@@ -385,7 +387,8 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user, proj
         open={detail}
         onClose={detailClose}
       >
-        <Box className="Title_Popup" sx={{ p: 2, borderBottom: 'thin solid var(--background_1)' }}>Công việc thuộc dự án {project}</Box>
+        <Box className="Title_Popup" sx={{ p: 2, borderBottom: 'thin solid var(--background_1)' }}>
+          Công việc thuộc dự án {projects}</Box>
         <Box sx={{ p: 2, bgcolor: 'var(--background)', pt: 1, maxHeight: '80vh' }} >
           <div style={{ flex: 1 }}>
             <p className="Title_Popup" style={{ padding: '4px 0 12px 0' }}>Thông tin</p>
@@ -393,36 +396,40 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user, proj
               display: 'flex', gap: 8, flexDirection: 'column', padding: 12,
               border: 'thin solid var(--background_1)', borderRadius: 3, background: 'white'
             }}>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Công việc:</p> {data.name}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Công việc:</p> {projects}</div>
               <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>
                 Thời gian thực hiện: </p>{startDate == endDate ? startDate : `${startDate} - ${startDate}`}</div>
               <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Chi tiết công việc:</p> {data.detail}</div>
               <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Loại công việc:</p> {type}</div>
               <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Trạng thái hoàn thành: </p>{data.doerDone ? 'Hoàn thành' : 'Chưa hoàn thành'}</div>
               <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Trạng thái kiểm duyệt: </p>{data.checkerDone ? 'Đã duyệt' : 'Chưa duyệt'}</div>
-              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Người kiểm duyệt:</p> {user}</div>
+              <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Người kiểm duyệt:</p> {users}</div>
               <div style={{ display: 'flex', gap: 8 }}><p className='text_3' style={{ fontWeight: 500 }}>Ghi chú: </p>{data.notes}</div>
             </div>
           </div>
           <p className="Title_Popup" style={{ margin: '12px 0 12px 0' }}>Tài nguyên</p>
-          <div style={{
-            display: 'flex', gap: 8, padding: 12,
-            border: 'thin solid var(--background_1)', borderRadius: 3, background: 'white', width: 'calc(100% - 24px)'
-          }}>
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              p: .5,
+          <Link href={`https://drive.google.com/drive/folders/${data.linkDrive}`}>
+            <div style={{
+              display: 'flex', gap: 8, padding: 12,
+              border: 'thin solid var(--background_1)', borderRadius: 3, background: 'white', width: 'calc(100% - 24px)'
             }}>
-              <img
-                src='https://assets.minimals.cc/public/assets/icons/apps/ic-app-drive.svg'
-                alt='dsds'
-                loading="lazy"
-              />
-              <Box>{data.Project} - {data.Task}</Box>
-            </Box>
-          </div>
+
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+                p: .5,
+              }}>
+                <img
+                  src='https://assets.minimals.cc/public/assets/icons/apps/ic-app-drive.svg'
+                  alt='dsds'
+                  loading="lazy"
+                />
+                <Box>{projects} - {data.name}</Box>
+              </Box>
+
+            </div>
+          </Link>
         </Box>
       </Dialog >
       <Backdrop

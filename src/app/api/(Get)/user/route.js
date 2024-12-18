@@ -1,5 +1,5 @@
 import connectDB from '@/config/database'
-import PostTask from "@/models/postTask"
+import PostUser from "@/models/postUser"
 import { authenticate } from '@/utils/authenticate'
 import { NextResponse } from 'next/server'
 
@@ -8,17 +8,13 @@ export const preferredRegion = process.env.area
 export async function POST(request) {
   try {
     const { user } = await authenticate(request)
-
-    console.log(user);
-
     let data
     let message = 'Lấy dữ liệu thành công'
     let status = 200
     await connectDB();
-    if (user.role == 'Quản lý') data = await PostTask.find({})
-    else data = await PostTask.find({ doer: user.id })
+    data = await PostUser.find({})
     return NextResponse.json(
-      { air: status === 200 ? 2 : 1, mes: message, data },
+      { air: status === 200 ? 2 : 1, mes: message, data},
       { status }
     );
   } catch (error) {

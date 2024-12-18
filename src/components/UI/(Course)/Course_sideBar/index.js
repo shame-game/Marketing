@@ -10,7 +10,8 @@ import None from './sever/none';
 import TextField from '@mui/material/TextField';
 import Project_Create from '@/app/project/ui/Project_Create';
 
-export default function CourseSideBar({ data = [] }) {
+export default function CourseSideBar({ data = [], department, statusProject }) {
+
   const [tabValue, setTabValue] = useState(0);
   const courseCounts = data ? data.reduce(
     (counts, e) => {
@@ -28,9 +29,8 @@ export default function CourseSideBar({ data = [] }) {
       onClick: () => setTabValue(0),
       content: (
         <>
-          {/* {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />} */}
           {courseCounts ? courseCounts.inProgress ? (
-            <CourseWrapCoursePresent data={data.filter((item) => !item.Status)} />
+            <CourseWrapCoursePresent data={data.filter((item) => !item.Status)}  department={ department} />
           ) : (
             <None />
           ) : (

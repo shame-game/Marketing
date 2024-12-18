@@ -80,7 +80,6 @@ export default function Task_Create({ dataType, dataProject, token, user }) {
         data.checker = dataProject[i].leader
       }
     }
-
     try {
       const response = await fetch('https://todo.tr1nh.net/api/task', {
         method: 'POST',

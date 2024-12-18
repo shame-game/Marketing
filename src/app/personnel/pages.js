@@ -12,8 +12,6 @@ export default async function Page_Personnel() {
     allUser = null
     allPer = null
   }
-
-
   return (
     <>
       <RoleList data={allUser} per={allPer} />

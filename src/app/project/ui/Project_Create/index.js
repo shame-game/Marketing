@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
-import fetchApi from '@/utils/API_suport/fetchData';
 
 export default function Project_Create() {
   const [isLoading, setIsLoading] = useState(false);
