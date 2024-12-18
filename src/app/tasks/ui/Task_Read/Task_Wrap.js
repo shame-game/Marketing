@@ -247,7 +247,7 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
       </Box>
 
       {/* Danh sách task */}
-      <Task_Read_List student={filteredData} type={dataTaskType}  dataType={TaskTypeOptions} dataProject={result} token={token} user={user.id}/>
+      <Task_Read_List student={filteredData} project={dataProject} type={dataTaskType}  dataType={TaskTypeOptions} dataProject={result} token={token} user={user.id}/>
     </Box>
   );
 }

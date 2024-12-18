@@ -10,7 +10,7 @@ export default async function Task() {
   const token = cookieStore.get('airobotic');
   const user = jwt.verify(token.value, process.env.JWT_SECRET)
   let dataTask = await Task_Read_all()
-  const dataProject = Project_Read_all()
+  const dataProject = await Project_Read_all()
   const dataTaskType = await Task_Read_Type()
   let g = [[], [], []]
   dataTask ? dataTask.forEach(e => {

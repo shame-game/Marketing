@@ -17,13 +17,12 @@ import LibraryAddCheckRoundedIcon from '@mui/icons-material/LibraryAddCheckRound
 import TablePagination from '@mui/material/TablePagination';
 import Dialog from '@mui/material/Dialog';
 import { Project_Read_all, User_Read_all } from '@/app/data';
-import Task_Update from '../Task_Update/Task_Update';
 import Popup_Form from '@/utils/Extensions_UI/Popup_Form';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 
 
-export default function Task_Read_List({ student, type, dataType, dataProject, token, user }) {
+export default function Task_Read_List({ student, type, dataType, dataProject, token, user, project }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -43,7 +42,7 @@ export default function Task_Read_List({ student, type, dataType, dataProject, t
   return (
     <Box sx={{ width: '100%' }}>
       {currentStudents.map((student, index) => (
-        <UI_Student_List key={index} data={student} types={type} dataType={dataType} dataProject={dataProject} token={token} user={user} />
+        <UI_Student_List key={index} data={student} types={type} dataType={dataType} project={project} dataProject={dataProject} token={token} user={user} />
       ))}
       <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, borderTop: 'thin solid var(--background_1)' }}>
         <TablePagination
@@ -59,21 +58,22 @@ export default function Task_Read_List({ student, type, dataType, dataProject, t
   );
 }
 
-function UI_Student_List({ data, types, dataType, dataProject, token, user }) {
+function UI_Student_List({ data, types, dataType, dataProject, token, user, project }) {
   let startDate = data.startDate.split('T')[0].slice(-2) + '/' +
     data.startDate.split('T')[0].slice(-5, -3) + '/' + data.startDate.split('T')[0].slice(0, 4)
   let endDate = data.endDate.split('T')[0].slice(-2) + '/' +
     data.endDate.split('T')[0].slice(-5, -3) + '/' + data.endDate.split('T')[0].slice(0, 4)
   let users = User_Read_all()
-  let project = Project_Read_all()
+  let projects = project
   let type = types
   type.forEach(t => {
     if (t._id.toLowerCase() == data.taskCategory.toLowerCase()) type = t.name
   })
-  project.forEach(t => { if (t._id == data.project) project = t.name })
+  projects.forEach(t => { if (t._id == data.project) projects = t.name })
   users.forEach(t => { if (t._id == data.checker) users = t.Name })
 
   if (typeof (type) == 'object') type = 'Không xác định'
+  if (typeof (projects) == 'object') projects = 'Không xác định'
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [detail, setdetail] = useState(false);
@@ -262,7 +262,7 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user }) {
       >
         <div style={{ padding: '8px 0 8px 16px ', display: 'flex', flex: 7.4 }} onClick={openDetail}>
           <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-            <p>{project}</p>
+            <p>{projects}</p>
           </Box>
           <Box sx={{ flex: '2', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
             <p>{data.name}</p>
