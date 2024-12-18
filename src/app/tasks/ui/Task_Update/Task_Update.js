@@ -3,96 +3,96 @@
 import { useState } from 'react';
 import Popup_Form from '@/utils/Extensions_UI/Popup_Form';
 import Box from '@mui/material/Box';
-import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
-import fetchApi from '@/utils/API_suport/fetchData';
 
-export default function Task_Update({ dataType, dataProject, token, user, button }) {
-  const type = dataType.map(item => ({
+export default function Task_Update({ dataType, dataProject, token, button, data, project, type }) {
+  const types = dataType.map(item => ({
     label: item.name,
     value: item.id
   }));
 
-  const project = dataProject.map(item => ({
+  const projects = dataProject.map(item => ({
     label: item.name,
     value: item.id
   }));
+  projects.forEach(e => {
+    if (e.label == project) project = e
+  });
+  types.forEach(e => {
+    if (e.label == type) type = e
+  });
 
   const [isLoading, setIsLoading] = useState(false);
 
   const fields = [
+    // {
+    //   type: 'select',
+    //   name: 'project',
+    //   label: 'Dự án',
+    //   required: true,
+    //   defaultValue: project.value,
+    //   options: projects
+    // },
     {
-      type: 'select',
-      name: 'project',
-      label: 'Dự án',
+      type: 'input',
+      name: 'name',
+      label: 'Tên công việc',
+      defaultValue: data.name,
       required: true,
-      options: project,
     },
     {
       type: 'select',
       name: 'taskCategory',
       label: 'Loại công việc',
       required: true,
-      options: type,
+      defaultValue: type.value,
+      options: types,
     },
-    {
-      type: 'input',
-      name: 'name',
-      label: 'Tên công việc',
-      required: true,
-    },
+
     {
       type: 'date',
       name: 'startDate',
       label: 'Thời gian bắt đầu',
+      defaultValue: data.startDate.split('T')[0],
       required: true,
     },
     {
       type: 'date',
       name: 'endDate',
       label: 'Thời gian kết thúc',
+      defaultValue: data.endDate.split('T')[0],
       required: true,
     },
     {
       type: 'textarea',
       name: 'detail',
       label: 'Chi tiết công việc',
+      defaultValue: data.detail,
       required: true,
     },
     {
       type: 'textarea',
       name: 'notes',
+      defaultValue: data.notes,
       label: 'Ghi chú',
     },
 
 
   ];
 
-  const handleSave = async (data) => {
-    data.doer = user
-    data.doerDone = false
-    data.checkerDone = false
+  const handleSave = async (datas) => {
     setIsLoading(true)
-
-    for (let i in dataProject) {
-      if (dataProject[i].id == data.project) {
-        data.checker = dataProject[i].leader
-      }
-    }
-
     try {
-      const response = await fetch('https://todo.tr1nh.net/api/task', {
-        method: 'POST',
+      const response = await fetch(`https://todo.tr1nh.net/api/task/${data._id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(datas),
       });
-
       setIsLoading(false);
-
       if (response.ok) {
         window.location.reload();
       } else {
@@ -109,8 +109,8 @@ export default function Task_Update({ dataType, dataProject, token, user, button
     <>
       <Box sx={{ width: 'max-content', height: '100%' }}>
         <Popup_Form
-          button={ button }
-          title="Tạo công việc"
+          button={button}
+          title="Sửa thông tin công việc"
           fields={fields}
           onSave={handleSave}
         />

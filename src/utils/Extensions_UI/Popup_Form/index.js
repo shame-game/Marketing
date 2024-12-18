@@ -116,10 +116,11 @@ export default function Popup_Form({ button, title, fields, onSave, isLoading = 
         onClose={handleClose}
         fullWidth
         maxWidth="sm"
+        sx={{ maxHeight: '100vh' }}
       >
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <Box className="Title_Popup" sx={{ p: 2, borderBottom: 'thin solid var(--background_1)' }}>{title}</Box>
-          <Box sx={{ flex: 1, overflow: 'hidden', overflowY: 'auto', p: 2 }}>
+          <Box sx={{ flex: 1, overflow: 'hidden', overflowY: 'auto', p: 2 }} className="Wrap_Scroll">
             {isLoading ? (
               <Box
                 sx={{

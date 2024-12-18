@@ -16,8 +16,12 @@ import AssignmentTurnedInRoundedIcon from '@mui/icons-material/AssignmentTurnedI
 import LibraryAddCheckRoundedIcon from '@mui/icons-material/LibraryAddCheckRounded';
 import TablePagination from '@mui/material/TablePagination';
 import Dialog from '@mui/material/Dialog';
-import { Project_Read_all, Task_Read_Type, User_Read_all } from '@/app/data';
+import { Project_Read_all, User_Read_all } from '@/app/data';
 import Task_Update from '../Task_Update/Task_Update';
+import Popup_Form from '@/utils/Extensions_UI/Popup_Form';
+import CircularProgress from '@mui/material/CircularProgress';
+import Backdrop from '@mui/material/Backdrop';
+
 
 export default function Task_Read_List({ student, type, dataType, dataProject, token, user }) {
   const [page, setPage] = useState(0);
@@ -85,6 +89,160 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user }) {
   const openDetail = () => setdetail(true)
   const detailClose = () => setdetail(false)
 
+
+  // Sửa thông tin công việc 
+  const typess = dataType.map(item => ({
+    label: item.name,
+    value: item.id
+  }));
+  let typeUpdate;
+  typess.forEach(e => {
+    if (e.label == type) typeUpdate = e
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fields = [
+    {
+      type: 'input',
+      name: 'name',
+      label: 'Tên công việc',
+      defaultValue: data.name,
+      required: true,
+    },
+    {
+      type: 'select',
+      name: 'taskCategory',
+      label: 'Loại công việc',
+      required: true,
+      defaultValue: typeUpdate.value,
+      options: typess,
+    },
+
+    {
+      type: 'date',
+      name: 'startDate',
+      label: 'Thời gian bắt đầu',
+      defaultValue: data.startDate.split('T')[0],
+      required: true,
+    },
+    {
+      type: 'date',
+      name: 'endDate',
+      label: 'Thời gian kết thúc',
+      defaultValue: data.endDate.split('T')[0],
+      required: true,
+    },
+    {
+      type: 'textarea',
+      name: 'detail',
+      label: 'Chi tiết công việc',
+      defaultValue: data.detail,
+      required: true,
+    },
+    {
+      type: 'textarea',
+      name: 'notes',
+      defaultValue: data.notes,
+      label: 'Ghi chú',
+    },
+
+
+  ];
+
+  const handleSave = async (datas) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`https://todo.tr1nh.net/api/task/${data._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(datas),
+      });
+      setIsLoading(false);
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        alert(`Đã xảy ra lỗi: ${errorData.mes || errorData.message || 'Không xác định'}`);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      alert(`Đã xảy ra lỗi: ${error.message}`);
+    }
+  };
+
+  const checkDone = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`https://todo.tr1nh.net/api/task/${data._id}/doer-done`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      setIsLoading(false);
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        alert(`Đã xảy ra lỗi: ${errorData.mes || errorData.message || 'Không xác định'}`);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      alert(`Đã xảy ra lỗi: ${error.message}`);
+    }
+  };
+
+  const checkerDone = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`https://todo.tr1nh.net/api/task/${data._id}/checker-done`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      setIsLoading(false);
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        alert(`Đã xảy ra lỗi: ${errorData.mes || errorData.message || 'Không xác định'}`);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      alert(`Đã xảy ra lỗi: ${error.message}`);
+    }
+  };
+
+  const deleteTask = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`https://todo.tr1nh.net/api/task/${data._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      setIsLoading(false);
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        alert(`Đã xảy ra lỗi: ${errorData.mes || errorData.message || 'Không xác định'}`);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      alert(`Đã xảy ra lỗi: ${error.message}`);
+    }
+  };
+
   return (
     <>
       <Box
@@ -151,7 +309,6 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user }) {
             id="account-menu"
             open={open}
             onClose={handleClose}
-            onClick={handleClose}
             slotProps={{
               paper: {
                 elevation: 0,
@@ -189,26 +346,31 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user }) {
               </ListItemIcon>
               Xem chi tiết
             </MenuItem>
-            <Task_Update button={<MenuItem >
-              <ListItemIcon>
-                <BorderColorRoundedIcon fontSize="small" />
-              </ListItemIcon>
-              Sửa công việc
-            </MenuItem>} dataType={dataType} dataProject={dataProject} token={token} user={user} />
-            <MenuItem onClick={handleClose}>
+            <Popup_Form
+              button={<MenuItem sx={{ width: '100%' }}>
+                <ListItemIcon>
+                  <BorderColorRoundedIcon fontSize="small" />
+                </ListItemIcon>
+                Sửa công việc
+              </MenuItem>}
+              title="Sửa thông tin công việc"
+              fields={fields}
+              onSave={handleSave}
+            />
+            <MenuItem onClick={checkDone}>
               <ListItemIcon>
                 <AssignmentTurnedInRoundedIcon fontSize="small" />
               </ListItemIcon>
               Xác nhận hoàn thành
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={checkerDone}>
               <ListItemIcon>
                 <LibraryAddCheckRoundedIcon fontSize="small" />
               </ListItemIcon>
-              Kiểm tra công việc
+              Kiểm duyệt công việc
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose} sx={{ color: '#b01b1b' }}>
+            <MenuItem onClick={deleteTask} sx={{ color: '#b01b1b' }}>
               <ListItemIcon>
                 <DeleteRoundedIcon sx={{ color: '#b01b1b' }} fontSize="small" />
               </ListItemIcon>
@@ -263,6 +425,12 @@ function UI_Student_List({ data, types, dataType, dataProject, token, user }) {
           </div>
         </Box>
       </Dialog >
+      <Backdrop
+        sx={{ color: '#fff', zIndex: 9999 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 }
