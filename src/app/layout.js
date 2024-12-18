@@ -31,7 +31,6 @@ export default async function RootLayout({ children }) {
       data = result.data;
     }
   }
-  console.log(data);
 
   return (
     <html lang="en">

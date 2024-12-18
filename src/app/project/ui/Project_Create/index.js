@@ -8,40 +8,24 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import fetchApi from '@/utils/API_suport/fetchData';
 
-export default function Task_Create({ dataType, dataProject, token, user }) {
-  console.log(dataProject);
-  
-  const type = dataType.map(item => ({
-    label: item.name,
-    value: item.id
-  }));
-
-  const project = dataProject.map(item => ({
-    label: item.name,
-    value: item.id
-  }));
-
+export default function Project_Create() {
   const [isLoading, setIsLoading] = useState(false);
-
   const fields = [
     {
-      type: 'select',
-      name: 'project',
-      label: 'Dự án',
+      type: 'input',
+      name: 'name',
+      label: 'Tên dự án',
       required: true,
-      options: project,
-    },
-    {
-      type: 'select',
-      name: 'taskCategory',
-      label: 'Loại công việc',
-      required: true,
-      options: type,
     },
     {
       type: 'input',
-      name: 'Name',
-      label: 'Tên công việc',
+      name: 'description',
+      label: 'Mô tả dự án'
+    },
+    {
+      type: 'input',
+      name: 'department',
+      label: 'Phòng ban',
       required: true,
     },
     {
@@ -54,43 +38,29 @@ export default function Task_Create({ dataType, dataProject, token, user }) {
       type: 'date',
       name: 'endDate',
       label: 'Thời gian kết thúc',
-    },
-    {
-      type: 'textarea',
-      name: 'detail',
-      label: 'Chi tiết công việc',
       required: true,
     },
     {
-      type: 'textarea',
+      type: 'areatext',
       name: 'notes',
       label: 'Ghi chú',
       required: true,
     },
-    
-
+    {
+      type: 'select',
+      name: 'piority',
+      label: 'Sự ưu tiên',
+      required: true,
+      options: [
+        { label: '1', value: '1' },
+        { label: '2', value: '2' },
+      ],
+    },
   ];
 
   const handleSave = async (data) => {
-    data.doer = user
-    data.doerDone = false
-    data.checkerDone = false
     setIsLoading(true)
-    dataProject.forEach(e => {
-      
-    });
-    dataProject.map(item => ({
-      label: item.name,
-      value: item.id
-    }));
-    // const response = await fetch('https://todo.tr1nh.net/api/task', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${token}`,
-    //   },
-    //   body: JSON.stringify(body),
-    // });
+    console.log(data);
     setIsLoading(false)
   };
 
@@ -100,18 +70,17 @@ export default function Task_Create({ dataType, dataProject, token, user }) {
         <Popup_Form
           button={
             <div className='flexCenter' style={{ height: 39, background: 'var(--main)', p: 0, borderRadius: 3, cursor: 'pointer', color: 'white', padding: '0 16px', gap: 8 }} >
-              <AddBoxRoundedIcon sx={{ color: 'white', fontSize: 18 }} /> Thêm công việc
+              <AddBoxRoundedIcon sx={{ color: 'white', fontSize: 18 }} /> Thêm dự án
             </div>
           }
-          title="Tạo công việc"
+          title="Tạo dự án"
           fields={fields}
           onSave={handleSave}
         />
       </Box>
       <Backdrop
-        sx={{ color: '#fff', zIndex: 9999 }}
-        open={isLoading}
-      >
+        sx={{ color: '#fff', zIndex: 99 }}
+        open={isLoading} >
         <CircularProgress color="inherit" />
       </Backdrop>
     </>

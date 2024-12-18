@@ -16,8 +16,9 @@ import AssignmentTurnedInRoundedIcon from '@mui/icons-material/AssignmentTurnedI
 import LibraryAddCheckRoundedIcon from '@mui/icons-material/LibraryAddCheckRounded';
 import TablePagination from '@mui/material/TablePagination';
 import Dialog from '@mui/material/Dialog';
-import Link from 'next/link';
+import { Project_Read_all, Task_Read_Type, User_Read_all } from '@/data';
 export default function Task_Read_List({ student }) {
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -54,6 +55,13 @@ export default function Task_Read_List({ student }) {
 }
 
 function UI_Student_List({ data }) {
+  let user = User_Read_all()
+  let project = Project_Read_all()
+  let type = Task_Read_Type()
+  type.forEach(t => { if (t._id == data.taskCategory) type = t.name })
+  project.forEach(t => { if (t._id == data.project) project = t.name })
+  user.forEach(t => { if (t._id == data.checker) user = t.Name })
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [detail, setdetail] = useState(false);
 
@@ -72,54 +80,54 @@ function UI_Student_List({ data }) {
     <>
       <Box
         sx={{
-          height: '30px',
           display: 'flex',
           justifyContent: 'space-between',
-          py: '10px',
-          px: 2,
           borderBottom: '1px solid',
           borderColor: 'var(--background_1)',
           textDecoration: 'none',
-          backgroundColor: data.Check ? '#d2ffd2' : 'unset',
+          backgroundColor: data.checkerDone ? '#d2ffd2' : 'unset',
           transition: 'all .2s linear',
           cursor: 'pointer',
           '&:hover': {
-            backgroundColor: data.Check ? '#b2efb2' : 'var(--background)',
+            backgroundColor: data.checkerDone ? '#b2efb2' : 'var(--background)',
           },
         }}
-        onClick={openDetail}
       >
-        <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-          <p>{data.Project}</p>
-        </Box>
-        <Box sx={{ flex: '2', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
-          <p>{data.Task}</p>
-        </Box>
-        <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
-          <p>{data.Start}</p>
-        </Box>
-        <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
-          <p>{data.End}</p>
-        </Box>
-        <Box sx={{ flex: '.7', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
-          <p>{data.Type}</p>
-        </Box>
-        <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
-          <p>{data.DoerCheck}</p>
-        </Box>
-        <Box sx={{ flex: '.7', display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center' }}>
-          <Tooltip title="Hoàn thành">
-            <div className={data.Check ? 'iconWrap2 flexCenter' : 'iconWrap flexCenter'} >
-              <AssignmentTurnedInRoundedIcon fontSize="small" sx={{ color: data.DoerDone ? 'green' : 'unset' }} />
-            </div>
-          </Tooltip>
-          <Tooltip title="Được duyệt">
-            <div className={data.Check ? 'iconWrap2 flexCenter' : 'iconWrap flexCenter'} >
-              <LibraryAddCheckRoundedIcon fontSize="small" sx={{ color: data.Check ? 'green' : 'unset' }} />
-            </div>
-          </Tooltip>
-        </Box>
-        <Box sx={{ flex: '.3', display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center', fontWeight: '500', gap: 1 }}>
+        <div style={{ padding: '8px 0 8px 16px ', display: 'flex', flex: 7.4 }} onClick={openDetail}>
+          <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+            <p>{project}</p>
+          </Box>
+          <Box sx={{ flex: '2', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
+            <p>{data.name}</p>
+          </Box>
+          <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
+            <p>{data.startDate.split('T')[0].slice(-2)}/
+              {data.startDate.split('T')[0].slice(-5, -3)}/{data.startDate.split('T')[0].slice(0, 4)}</p>
+          </Box>
+          <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
+            <p>{data.endDate.split('T')[0].slice(-2)}/
+              {data.endDate.split('T')[0].slice(-5, -3)}/{data.endDate.split('T')[0].slice(0, 4)}</p>
+          </Box>
+          <Box sx={{ flex: '.7', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
+            <p>{type}</p>
+          </Box>
+          <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
+            <p>{user}</p>
+          </Box>
+          <Box sx={{ flex: '.7', display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center' }}>
+            <Tooltip title="Hoàn thành">
+              <div className={data.Check ? 'iconWrap2 flexCenter' : 'iconWrap flexCenter'} >
+                <AssignmentTurnedInRoundedIcon fontSize="small" sx={{ color: data.doerDone ? 'green' : 'unset' }} />
+              </div>
+            </Tooltip>
+            <Tooltip title="Được duyệt">
+              <div className={data.checkerDone ? 'iconWrap2 flexCenter' : 'iconWrap flexCenter'} >
+                <LibraryAddCheckRoundedIcon fontSize="small" sx={{ color: data.checkerDone ? 'green' : 'unset' }} />
+              </div>
+            </Tooltip>
+          </Box>
+        </div>
+        <Box sx={{ flex: '.3', display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center', fontWeight: '500', gap: 1, pr: 2 }}>
           <Tooltip title="Hành động">
             <IconButton
               onClick={handleClick}

@@ -54,7 +54,7 @@ export async function POST(request) {
         data = newPost
       }
 
-      const accessToken = jwt.sign({ userId: data._id, role: data.Role }, process.env.JWT_SECRET);
+      const accessToken = jwt.sign({ id: data._id, role: data.Role }, process.env.JWT_SECRET);
 
       const cookieStore = cookies();
       cookieStore.set('airobotic', accessToken, {

@@ -186,7 +186,7 @@ export default function Popup_Form({ button, title, fields, onSave, isLoading = 
 
                 if (field.type === 'select') {
                   return (
-                    <Box key={index} sx={{ margin: '8px 0' }}>
+                    <Box key={index} sx={{ padding: '8px 0' }}>
                       <Select
                         size='small'
                         label={field.label}
@@ -285,6 +285,7 @@ export default function Popup_Form({ button, title, fields, onSave, isLoading = 
                     <TextField
                       key={index}
                       type="date"
+                      size='small'
                       label={field.label}
                       name={field.name}
                       value={formData[field.name] || ''}

@@ -8,8 +8,7 @@ import Task_Create from "@/app/tasks/ui/Task_Create";
 import Task_Read_List from "@/app/tasks/ui/Task_Read/Task_List";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
-import IconButton from "@mui/material/IconButton";
+import FindReplaceIcon from '@mui/icons-material/FindReplace';
 import { Stack } from "@mui/material";
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -17,68 +16,76 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-const Status_ = ["Đã hoàn thành", "Đang làm", "Bị trễ"];
-const Type_ = ["Lập trình", "Chụp hình", "Viết nội dung", "Làm video"];
+const Status_ = ["Đã hoàn thành", "Chưa hoàn thành", "Đã kiểm duyệt", "Chưa kiểm duyệt"];
 
-export default function Wrap_table({ dataTasks }) {
-  const [value, setValue] = useState(dayjs('2022-04-17'));
-  // Tạo danh sách dự án
-  const Project = useMemo(() => {
-    return Object.values(
-      dataTasks.reduce((acc, item) => {
-        const projectName = item.Project;
-        if (!acc[projectName]) {
-          acc[projectName] = {
-            name: projectName,
-            length: 0,
-            Detail: []
-          };
-        }
-        acc[projectName].length += 1;
-        acc[projectName].Detail.push({
-          Task: item.Task,
-          _id: item._id
-        });
-        return acc;
-      }, {})
-    );
-  }, [dataTasks]);
+export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token, user }) {
+  const TaskTypeOptions = dataTaskType.map((type) => ({ name: type.name, id: type._id }));
+  // Tạo mảng kết quả (dự án) kèm số task
+  const taskCountMap = {};
+  dataTasks.forEach(t => {
+    if (!taskCountMap[t.project]) taskCountMap[t.project] = 0;
+    taskCountMap[t.project]++;
+  });
 
-  const [Area, setArea] = useState(null);
+  const result = dataProject.map(proj => {
+    return {
+      name: proj.name,
+      id: proj._id,
+      tasks: taskCountMap[proj._id] || 0
+    };
+  });
+
+  const [selectedAreas, setSelectedAreas] = useState([]);
   const [Status, setStatus] = useState(null);
   const [Type, setType] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
-  // Hàm lọc dữ liệu
+  // Lọc dữ liệu
   const filteredData = useMemo(() => {
     return dataTasks.filter((task) => {
-      // Lọc theo dự án
-      if (Area && task.Project !== Area.value) return false;
-
-      // Lọc theo trạng thái
-      if (Status && task.Status !== Status) return false;
-
-      // Lọc theo loại
-      if (Type && task.Type !== Type) return false;
-
-      // Lọc theo từ khóa tìm kiếm (trên Task và Project)
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const matchTask = task.Task && task.Task.toLowerCase().includes(query);
-        const matchProject = task.Project && task.Project.toLowerCase().includes(query);
-        if (!matchTask && !matchProject) return false;
+      // Lọc theo dự án (nếu chọn)
+      if (selectedAreas && selectedAreas.length > 0) {
+        const selectedIds = selectedAreas.map(area => area.id);
+        if (!selectedIds.includes(task.project)) return false;
+      }
+      if (Status) {
+        if (Status === "Chưa kiểm duyệt") {
+          if (task.checkerDone) return false;
+        } else if (Status === "Đã kiểm duyệt") {
+          if (!task.checkerDone) return false;
+        } else if (Status === "Chưa hoàn thành") {
+          if (task.checkerDone || task.doerDone) return false;
+        } else if (Status === "Đã hoàn thành") {
+          if (!task.doerDone) return false;
+        }
       }
 
-      // Lọc theo ngày
-      const taskStart = task.StartDate ? new Date(task.StartDate) : null;
-      const taskEnd = task.EndDate ? new Date(task.EndDate) : null;
+      console.log(Type);
+
+      if (Type && task.taskCategory !== Type) return false;
+
+
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const taskNameMatch = task.name && task.name.toLowerCase().includes(query);
+        // Giả sử task.project là projectId, ta tìm name project từ dataProject
+        const projectName = dataProject.find(p => p._id === task.project)?.name?.toLowerCase() || '';
+        const projectNameMatch = projectName.includes(query);
+
+        if (!taskNameMatch && !projectNameMatch) return false;
+      }
+
+      // Lọc theo ngày bắt đầu, kết thúc
+      const taskStart = task.startDate ? new Date(task.startDate) : null;
+      const taskEnd = task.endDate ? new Date(task.endDate) : null;
 
       if (startDate) {
         const filterStart = new Date(startDate);
         if (!taskStart || taskStart < filterStart) return false;
       }
+
       if (endDate) {
         const filterEnd = new Date(endDate);
         if (!taskEnd || taskEnd > filterEnd) return false;
@@ -86,15 +93,15 @@ export default function Wrap_table({ dataTasks }) {
 
       return true;
     });
-  }, [dataTasks, Area, Status, Type, searchQuery, startDate, endDate]);
+  }, [dataTasks, selectedAreas, Status, Type, searchQuery, startDate, endDate, dataProject]);
 
   const handleClearFilters = () => {
-    setArea(null);
+    setSelectedAreas([]);
     setStatus(null);
     setType(null);
     setSearchQuery('');
-    setStartDate('');
-    setEndDate('');
+    setStartDate(null);
+    setEndDate(null);
   };
 
   return (
@@ -111,7 +118,6 @@ export default function Wrap_table({ dataTasks }) {
       {/* Thanh trên cùng */}
       <Box sx={{ borderBottom: 'thin solid var(--background_1)' }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ borderBottom: 'thin solid var(--background_1)', p: 2 }}>
-
           {/* Khu vực tìm kiếm và chọn ngày */}
           <Stack direction="row" alignItems="center" spacing={2}>
             <Box
@@ -142,21 +148,24 @@ export default function Wrap_table({ dataTasks }) {
                 }}
               />
             </Box>
+
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker', 'DatePicker']} sx={{ p: 0, alignItems: 'center' }}>
                 <DatePicker
-                  defaultValue={dayjs('2022-04-17')}
+                  value={startDate ? dayjs(startDate) : null}
+                  onChange={(newValue) => setStartDate(newValue ? newValue.toDate() : null)}
                   size="small"
                   slotProps={{
                     textField: {
                       size: 'small',
                       sx: { fontSize: '14px', marginLeft: '6px !important' },
                     },
-                  }} />
+                  }}
+                />
                 <div style={{ height: '100%', marginLeft: '8px' }} className="flexCenter text_2">-</div>
                 <DatePicker
-                  value={value}
-                  onChange={(newValue) => setValue(newValue)}
+                  value={endDate ? dayjs(endDate) : null}
+                  onChange={(newValue) => setEndDate(newValue ? newValue.toDate() : null)}
                   slotProps={{
                     textField: {
                       size: 'small',
@@ -169,11 +178,11 @@ export default function Wrap_table({ dataTasks }) {
           </Stack>
 
           <Stack direction="row" spacing={2}>
-            <Task_Create />
-            {(Area || Status || Type || searchQuery || startDate || endDate) && (
-              <IconButton onClick={handleClearFilters} title="Xóa tất cả bộ lọc">
-                <ClearIcon />
-              </IconButton>
+            <Task_Create dataType={TaskTypeOptions} dataProject={result}  token={token} user={user.id} />
+            {(selectedAreas.length > 0 || Status || Type || searchQuery || startDate || endDate) && (
+              <div onClick={handleClearFilters} className='flexCenter' style={{ height: 39, background: 'var(--main)', p: 0, borderRadius: 3, cursor: 'pointer', color: 'white', padding: '0 16px', gap: 8 }} >
+                <FindReplaceIcon />Làm mới
+              </div>
             )}
           </Stack>
         </Stack>
@@ -181,17 +190,18 @@ export default function Wrap_table({ dataTasks }) {
         {/* Khu vực các combobox lọc */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2, gap: 2 }}>
           <Autocomplete
+            multiple
             disablePortal
-            options={Project.map((project) => ({
-              label: `${project.name} (${project.length} công việc)`,
-              value: project.name,
-            }))}
+            options={result}
             sx={{ flex: 1 }}
             size="small"
-            value={Area}
-            onChange={(event, value) => setArea(value)}
+            value={selectedAreas}
+            onChange={(event, value) => setSelectedAreas(value)}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionLabel={(option) => `${option.name} (${option.tasks} công việc)`}
             renderInput={(params) => <TextField {...params} label="Chọn dự án" />}
           />
+
           <Autocomplete
             disablePortal
             options={Status_}
@@ -201,13 +211,15 @@ export default function Wrap_table({ dataTasks }) {
             onChange={(event, value) => setStatus(value)}
             renderInput={(params) => <TextField {...params} label="Chọn trạng thái" />}
           />
+
           <Autocomplete
             disablePortal
-            options={Type_}
+            options={TaskTypeOptions} // Dữ liệu mảng [{ name: ..., id: ... }]
             sx={{ flex: 1 }}
             size="small"
-            value={Type}
-            onChange={(event, value) => setType(value)}
+            getOptionLabel={(option) => option.name} // Hiển thị 'name' trong danh sách
+            value={TaskTypeOptions.find((item) => item.id === Type) || null} // Hiển thị giá trị hiện tại
+            onChange={(event, value) => setType(value ? value.id : null)} // Lấy giá trị _id khi thay đổi
             renderInput={(params) => <TextField {...params} label="Chọn loại" />}
           />
         </Box>

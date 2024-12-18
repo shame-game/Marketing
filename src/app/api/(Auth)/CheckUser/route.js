@@ -22,7 +22,7 @@ export async function POST(request) {
 
     await dbConnect();
 
-    const users = await PostUser.findOne({ _id: user.userId }, { Name: 1, Avt: 1, Role: 1 });
+    const users = await PostUser.findOne({ _id: user.id }, { Name: 1, Avt: 1, Role: 1 });
     if (!users) {
       return NextResponse.json(
         { air: 0, mes: 'Người dùng không tồn tại!' },

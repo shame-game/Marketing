@@ -8,32 +8,31 @@ import CourseWrapCoursePresent from '@/components/UI/(Course)/Course_sideBar/sev
 import Nav from './sever/index';
 import None from './sever/none';
 import TextField from '@mui/material/TextField';
+import Project_Create from '@/app/project/ui/Project_Create';
 
-export default function CourseSideBar({ data = [], data_book = [] }) {
+export default function CourseSideBar({ data = [] }) {
   const [tabValue, setTabValue] = useState(0);
-  const courseCounts = data.reduce(
+  const courseCounts = data ? data.reduce(
     (counts, e) => {
-      if (!e.Status) counts.inProgress += 1;
-      else if (e.Status && e.Type === 'AI Robotic') counts.completed += 1;
-      else if (e.Type !== 'AI Robotic') counts.review += 1;
-      else if (e.Type === 'Trial Class') counts.program += 1;
+      counts.inProgress += 1;
       return counts;
     },
     { inProgress: 0, completed: 0, program: 0, review: 0 }
-  );
-
+  ) : null
   const tabs = [
     {
       label: 'Dự án đang thực hiện',
       icon: <CollectionsBookmarkRoundedIcon />,
-      count: courseCounts.inProgress,
+      count: data ? courseCounts.inProgress : 0,
       status: tabValue === 0,
       onClick: () => setTabValue(0),
       content: (
         <>
           {/* {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />} */}
-          {courseCounts.inProgress ? (
+          {courseCounts ? courseCounts.inProgress ? (
             <CourseWrapCoursePresent data={data.filter((item) => !item.Status)} />
+          ) : (
+            <None />
           ) : (
             <None />
           )}
@@ -43,13 +42,13 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
     {
       label: 'Dự án hoàn thành',
       icon: <BookmarkAddedRoundedIcon />,
-      count: courseCounts.completed,
+      count: data ? courseCounts.completed : 0,
       status: tabValue === 1,
       onClick: () => setTabValue(1),
       content: (
         <>
           {/* {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />} */}
-          {courseCounts.completed ? (
+          {courseCounts ? courseCounts.completed ? (
             <CourseWrapCoursePresent
               data={data.filter(
                 (item) => item.Status && item.Type === 'AI Robotic'
@@ -57,33 +56,35 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
             />
           ) : (
             <None />
-          )}
+          ) : <None />}
         </>
       ),
     },
     {
       label: 'Dự án trễ',
       icon: <LocalLibraryRoundedIcon />,
-      count: courseCounts.program,
+      count: data ? courseCounts.program : 0,
       status: tabValue === 2,
       onClick: () => setTabValue(2),
-      content: courseCounts.program ? <>Có tồn tại</> : <None />,
+      content: courseCounts ? courseCounts.program ? <>Có tồn tại</> : <None /> : <None />,
     },
     {
       label: 'Dự án trễ',
       icon: <LocalLibraryRoundedIcon />,
-      count: courseCounts.review,
+      count: data ? courseCounts.review : 0,
       status: tabValue === 3,
       onClick: () => setTabValue(3),
       content: (
         <>
           {/* {data_book.allBook.length ? <SearchBar data_book={data_book} status={true} /> : <SearchBar data_book={data_book} status={false} />} */}
-          {courseCounts.completed ? (
+          {courseCounts ? courseCounts.completed ? (
             <CourseWrapCoursePresent
               data={data.filter(
                 (item) => item.Type === 'Trial Class'
               )}
             />
+          ) : (
+            <None />
           ) : (
             <None />
           )}
@@ -94,7 +95,6 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
 
   return (
     <>
-      {/* Tab Navigation */}
       <Box
         sx={{
           display: 'flex',
@@ -117,8 +117,7 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
           </Box>
         ))}
       </Box>
-
-      {/* Tab Content */}
+      <SearchBar />
       <Box
         sx={{
           height: 'calc(100% - 85px)',
@@ -130,10 +129,7 @@ export default function CourseSideBar({ data = [], data_book = [] }) {
   );
 }
 
-// Extracted SearchBar component to reduce duplication
-function SearchBar({ data_book, status }) {
-  console.log(status);
-
+function SearchBar() {
   return (
     <Box
       sx={{
@@ -152,7 +148,7 @@ function SearchBar({ data_book, status }) {
         size="small"
         sx={{ mr: 2, width: '400px', color: 'var(--main)' }}
       />
-      {status && <Bt_Add_Course data_book={data_book.allBook} />}
+      <Project_Create />
     </Box>
   );
 }
