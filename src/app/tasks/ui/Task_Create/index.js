@@ -9,7 +9,6 @@ import Backdrop from '@mui/material/Backdrop';
 import { getTodayDate, setValueInpue } from '@/app/function';
 
 export default function Task_Create({ dataType, dataProject, token, user, users, projects }) {
-
   let today = getTodayDate()
   const type = dataType.map(item => ({
     label: item.name,
@@ -21,10 +20,10 @@ export default function Task_Create({ dataType, dataProject, token, user, users,
     value: item.id
   }));
 
+
   let doers = setValueInpue(users, 'Name', '_id')
 
   const [isLoading, setIsLoading] = useState(false);
-  console.log('hi');
 
   const fields = [
     {
@@ -92,9 +91,10 @@ export default function Task_Create({ dataType, dataProject, token, user, users,
 
     for (let i in dataProject) {
       if (dataProject[i].id == data.project) {
-        data.checker = dataProject[i].leader
+        data.checker = dataProject[i].leader[0]
       }
     }
+
     try {
       const response = await fetch('https://todo.tr1nh.net/api/task', {
         method: 'POST',
@@ -134,7 +134,7 @@ export default function Task_Create({ dataType, dataProject, token, user, users,
         />
       </Box>
       <Backdrop
-        sx={{ color: '#fff', zIndex: 9999 }}
+        sx={{ color: '#fff', zIndex: 99999 }}
         open={isLoading}
       >
         <CircularProgress color="inherit" />
