@@ -22,6 +22,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Link from 'next/link';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { getUserByProject } from '@/app/function';
+import EmailIcon from '@mui/icons-material/Email';
 
 export default function Task_Read_List({ student, type, dataType, dataProject, token, user, project, users }) {
   const [page, setPage] = useState(0);
@@ -60,6 +61,14 @@ export default function Task_Read_List({ student, type, dataType, dataProject, t
 }
 
 function UI_Student_List({ data, types, dataType, userss, token, user, project }) {
+  let sendname;
+  for (let i in userss) {
+    if (userss[i]._id == user) {
+      sendname = userss[i]
+      break
+    }
+  }
+
   let userInProject = getUserByProject(userss, project, data)
   let startDate = data.startDate.split('T')[0].slice(-2) + '/' +
     data.startDate.split('T')[0].slice(-5, -3) + '/' + data.startDate.split('T')[0].slice(0, 4)
@@ -333,6 +342,24 @@ function UI_Student_List({ data, types, dataType, userss, token, user, project }
     }
   };
 
+  const sendMes = async () => {
+    setIsLoading(true)
+    let url = `https://script.google.com/macros/s/AKfycbx8gtYOEkSLSZf6IBEeDyg8bSnBA0FoV1VQcnUavejJL8Ue0dGf9OKbaGuOvXoSEmKTYQ/exec?name=${data.name}&project=${projects}&detail=${data.detail}&doer=${sendname.Name}&notes=${data.notes}&doerDone=${data.doerDone}&checkerDone=${data.checkerDone}&linkDrive=https://drive.google.com/drive/folders/${data.linkDrive}`
+    try {
+      const response = await fetch(`${url}`);
+      setIsLoading(false);
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        alert(`Đã xảy ra lỗi: ${errorData.mes || errorData.message || 'Không xác định'}`);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      alert(`Đã xảy ra lỗi: ${error.message}`);
+    }
+  }
+
   const deleteTask = async () => {
     setIsLoading(true)
     try {
@@ -373,7 +400,7 @@ function UI_Student_List({ data, types, dataType, userss, token, user, project }
           },
         }}
       >
-        <div style={{ padding: '8px 0 8px 16px ', display: 'flex', flex: 7.4 }} onClick={openSubTask}>
+        <div style={{ padding: '16px 0 16px 16px ', display: 'flex', flex: 7.4 }} onClick={openSubTask}>
           <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
             <p>{projects}</p>
           </Box>
@@ -397,20 +424,25 @@ function UI_Student_List({ data, types, dataType, userss, token, user, project }
           <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
             <p>{users}</p>
           </Box>
-          <Box sx={{ flex: '.7', display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center' }}>
-            <Tooltip title="Hoàn thành">
+        </div>
+        <Box sx={{ flex: '1', display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center', fontWeight: '500', gap: 1, pr: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center' }}>
+            <Tooltip title="Hoàn thành" onClick={checkDone}>
               <div className={data.Check ? 'iconWrap2 flexCenter' : 'iconWrap flexCenter'} >
                 <AssignmentTurnedInRoundedIcon fontSize="small" sx={{ color: data.doerDone ? 'green' : 'unset' }} />
               </div>
             </Tooltip>
-            <Tooltip title="Được duyệt">
+            <Tooltip title="Được duyệt" onClick={checkerDone}>
               <div className={data.checkerDone ? 'iconWrap2 flexCenter' : 'iconWrap flexCenter'} >
                 <LibraryAddCheckRoundedIcon fontSize="small" sx={{ color: data.checkerDone ? 'green' : 'unset' }} />
               </div>
             </Tooltip>
+            <Tooltip title="Gửi thông báo" onClick={sendMes}>
+              <div className={'iconWrap flexCenter'} >
+                <EmailIcon fontSize="small" />
+              </div>
+            </Tooltip>
           </Box>
-        </div>
-        <Box sx={{ flex: '.3', display: 'flex', alignItems: 'center', color: 'var(--text)', justifyContent: 'center', fontWeight: '500', gap: 1, pr: 2 }}>
           <Tooltip title="Hành động">
             <IconButton
               onClick={handleClick}
@@ -475,18 +507,6 @@ function UI_Student_List({ data, types, dataType, userss, token, user, project }
               fields={fields}
               onSave={handleSave}
             />
-            <MenuItem onClick={checkDone}>
-              <ListItemIcon>
-                <AssignmentTurnedInRoundedIcon fontSize="small" />
-              </ListItemIcon>
-              Xác nhận hoàn thành
-            </MenuItem>
-            <MenuItem onClick={checkerDone}>
-              <ListItemIcon>
-                <LibraryAddCheckRoundedIcon fontSize="small" />
-              </ListItemIcon>
-              Kiểm duyệt công việc
-            </MenuItem>
             <Popup_Form button={
               <MenuItem sx={{ width: '100%' }}>
                 <ListItemIcon>
