@@ -63,7 +63,7 @@ export default function Task_Read_List({ student, type, dataType, dataProject, t
 function UI_Student_List({ data, types, dataType, userss, token, user, project }) {
   let sendname;
   for (let i in userss) {
-    if (userss[i]._id == user) {
+    if (userss[i]._id == data.doer) {
       sendname = userss[i]
       break
     }
