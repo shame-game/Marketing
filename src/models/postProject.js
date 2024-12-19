@@ -35,13 +35,13 @@ const postProject = new Schema({
     type: String
   },
   members: {
-    type: Array
+    type: [Schema.Types.ObjectId]
   },
   calendarId: {
     type: String
   },
   leader: {
-    type: Array,
+    type: [Schema.Types.ObjectId]
   },
   status: {
     type: String

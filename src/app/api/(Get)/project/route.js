@@ -12,7 +12,15 @@ export async function POST(request) {
     let message = 'Lấy dữ liệu thành công'
     let status = 200
     await connectDB();
-    data = await PostProject.find({})
+    console.log(user.id);
+    
+    data = await PostProject.find({
+      $or: [
+        { leader: { $in: [user.id] } },
+        { members: { $in: [user.id] } }
+      ]
+    })
+    
     return NextResponse.json(
       { air: status === 200 ? 2 : 1, mes: message, data},
       { status }

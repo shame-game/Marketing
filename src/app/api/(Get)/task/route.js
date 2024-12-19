@@ -9,8 +9,6 @@ export async function POST(request) {
   try {
     const { user } = await authenticate(request)
 
-    console.log(user);
-
     let data
     let message = 'Lấy dữ liệu thành công'
     let status = 200

@@ -6,9 +6,11 @@ import Box from '@mui/material/Box';
 import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
-import fetchApi from '@/utils/API_suport/fetchData';
+import { getTodayDate, setValueInpue } from '@/app/function';
 
-export default function Task_Create({ dataType, dataProject, token, user }) {
+export default function Task_Create({ dataType, dataProject, token, user, users, projects }) {
+
+  let today = getTodayDate()
   const type = dataType.map(item => ({
     label: item.name,
     value: item.id
@@ -19,7 +21,10 @@ export default function Task_Create({ dataType, dataProject, token, user }) {
     value: item.id
   }));
 
+  let doers = setValueInpue(users, 'Name', '_id')
+
   const [isLoading, setIsLoading] = useState(false);
+  console.log('hi');
 
   const fields = [
     {
@@ -37,6 +42,14 @@ export default function Task_Create({ dataType, dataProject, token, user }) {
       options: type,
     },
     {
+      type: 'select',
+      name: 'doer',
+      label: 'Người thực hiện',
+      required: true,
+      defaultValue: user,
+      options: doers,
+    },
+    {
       type: 'input',
       name: 'name',
       label: 'Tên công việc',
@@ -46,12 +59,14 @@ export default function Task_Create({ dataType, dataProject, token, user }) {
       type: 'date',
       name: 'startDate',
       label: 'Thời gian bắt đầu',
+      defaultValue: today,
       required: true,
     },
     {
       type: 'date',
       name: 'endDate',
       label: 'Thời gian kết thúc',
+      defaultValue: today,
       required: true,
     },
     {

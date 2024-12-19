@@ -19,6 +19,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 const Status_ = ["Đã hoàn thành", "Chưa hoàn thành", "Đã kiểm duyệt", "Chưa kiểm duyệt"];
 
 export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token, user, users }) {
+
   const TaskTypeOptions = dataTaskType.map((type) => ({ name: type.name, id: type._id }));
   const taskCountMap = {};
 
@@ -177,7 +178,7 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
           </Stack>
 
           <Stack direction="row" spacing={2}>
-            <Task_Create dataType={TaskTypeOptions} dataProject={result} token={token} user={user.id} />
+            <Task_Create users={users} projects={dataProject} dataType={TaskTypeOptions} dataProject={result} token={token} user={user.id} />
             {(selectedAreas.length > 0 || Status || Type || searchQuery || startDate || endDate) && (
               <div onClick={handleClearFilters} className='flexCenter' style={{ height: 39, background: 'var(--main)', p: 0, borderRadius: 3, cursor: 'pointer', color: 'white', padding: '0 16px', gap: 8 }} >
                 <FindReplaceIcon />Làm mới
@@ -213,10 +214,10 @@ export default function Wrap_table({ dataTasks, dataProject, dataTaskType, token
 
           <Autocomplete
             disablePortal
-            options={TaskTypeOptions} // Dữ liệu mảng [{ name: ..., id: ... }]
+            options={TaskTypeOptions}
             sx={{ flex: 1 }}
             size="small"
-            getOptionLabel={(option) => option.name} // Hiển thị 'name' trong danh sách
+            getOptionLabel={(option) => option.name}
             value={TaskTypeOptions.find((item) => item.id === Type) || null} // Hiển thị giá trị hiện tại
             onChange={(event, value) => setType(value ? value.id : null)} // Lấy giá trị _id khi thay đổi
             renderInput={(params) => <TextField {...params} label="Chọn loại" />}
